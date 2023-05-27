@@ -9,9 +9,9 @@ const PORT = process.env.PORT
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
-const userRoute = require('./routes/Products');
+const productRoute = require('./routes/Products');
 
-app.use("/product", userRoute);
+app.use("/", productRoute);
 
 // Home Route!
 

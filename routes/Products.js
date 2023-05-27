@@ -1,79 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../models/productModel")
+const { getAllProducts } = require('./ProductsController')
+const { getProductByID } = require('./ProductsController')
+const { addProduct } = require('./ProductsController')
+const { updateProductByID } = require('./ProductsController')
+const { deleteProductByID } = require('./ProductsController')
 
 // Route
 
 //get all products
 
-router.get("/", async (req, res) => {
-    try {
-        const product = await Product.find({})
-        res.status(200).json(product)
-        
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({message: error.message})
-    }
-})
+router.get("/products", getAllProducts)
 
 //get product by id
 
-router.get("/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const product = await Product.findById(id);
-        res.status(200).json(product)
-        
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({message: error.message})
-    }
-})
+router.get("/product/:id", getProductByID)
 
-//Add product
+//add a Product
 
-router.post("/", async(req, res) => {
-    try {
-        const product = await Product.create(req.body)
-        res.status(200).json(product)
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({message: error.message})
-    }
-})
+router.post("/product", addProduct)
 
 //update a product
-router.put("/:id", async(req, res) =>{
-    try {
-        const id = req.params.id;
-        const product = await Product.findByIdAndUpdate(id, req.body);
-        if(!product){
-            return res.status(404).json({message: `Cannot find any product with id ${id}`})
-        }
-        const updatedProduct = await Product.findById(id);
-        res.status(200).json(updatedProduct);
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({message: error.message})
-    }
-})
+router.put("/product/:id", updateProductByID)
 
 // delete a product using id
 
-router.delete("/:id", async(req, res) => {
-    try {
-        const id = req.params.id;
-        const product = await Product.findByIdAndDelete(id);
-        if(!product){
-            return res.status(404).json({message: `cannot find any product with id ${id}`});
-        }
-        res.status(200).json(product)
-
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({message: error.message})
-    }
-})
+router.delete("/product/:id", deleteProductByID)
 
 module.exports = router;
